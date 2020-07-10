@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>5.0</version>
-    <date>2020-07-10T05:59:57Z</date>
+    <date>2020-07-10T08:23:47Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -213,6 +213,7 @@
                             <name>Libvirt - &quot;{#NAME}&quot; - Packets RX</name>
                             <key>collectd-libvirt.net-packets-rx[&quot;{#NAME}&quot;]</key>
                             <delay>60</delay>
+                            <value_type>FLOAT</value_type>
                             <units>pps</units>
                             <applications>
                                 <application>
@@ -224,6 +225,7 @@
                             <name>Libvirt - &quot;{#NAME}&quot; - Packets TX</name>
                             <key>collectd-libvirt.net-packets-tx[&quot;{#NAME}&quot;]</key>
                             <delay>60</delay>
+                            <value_type>FLOAT</value_type>
                             <units>pps</units>
                             <applications>
                                 <application>
