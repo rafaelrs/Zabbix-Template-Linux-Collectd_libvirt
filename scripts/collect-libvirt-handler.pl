@@ -20,23 +20,23 @@ use Collectd::Unixsock();
 	    
 	    if( $val =~ /^.*-virt_cpu_total/ ){
 		@vals = split(/-virt/, $val);
-		$val = $vals[0] . "/libvirt/" . "virt" . $vals[1]	
+		$val = $vals[0] . "/virt/" . "virt" . $vals[1]	
 	    }
 	    elsif($val =~ /^.*-disk-/ and $val_type =~ /^OPS/){
 		@vals = split(/-disk/, $val);
-		    $val = $vals[0] . "/libvirt/disk_ops" .$vals[1]
+		    $val = $vals[0] . "/virt/disk_ops" .$vals[1]
 	    }
 	    elsif($val =~ /^.*-disk-/ and $val_type =~ /^OCT/){
 		@vals = split(/-disk/, $val);
-		    $val = $vals[0] . "/libvirt/disk_octets" .$vals[1]
+		    $val = $vals[0] . "/virt/disk_octets" .$vals[1]
 	    }
 	    elsif($val =~ /^.*-if-/ and $val_type =~ /^NET-PACKETS/){
 		@vals = split(/-if/, $val);
-		    $val = $vals[0] . "/libvirt/if_packets" . $vals[1]
+		    $val = $vals[0] . "/virt/if_packets" . $vals[1]
 	    }
 	    elsif($val =~ /^.*-if-/ and $val_type =~ /^NET-OCTETS/){
 		@vals = split(/-if/, $val);
-		    $val = $vals[0] . "/libvirt/if_octets" .$vals[1]
+		    $val = $vals[0] . "/virt/if_octets" .$vals[1]
 	    }
 	    $command .= " " . $val;
 	    
@@ -185,11 +185,11 @@ sub putidjson {
                 $string .= "-" . $ident->{'plugin_instance'};
         }
 
-	if ($ident->{'plugin'} eq "libvirt" and $ident->{'type'} =~ /^disk/ and $val eq "LIBVIRT-DISK"){
+	if ($ident->{'plugin'} eq "virt" and $ident->{'type'} =~ /^disk/ and $val eq "LIBVIRT-DISK"){
 	    $ident->{'type'} =~ s/_ops//;
             $string .= "-" . $ident->{'type'};
 	}
-	elsif ($ident->{'plugin'} eq "libvirt" and $ident->{'type'} =~ /^if/ and $val eq "LIBVIRT-NET") {
+	elsif ($ident->{'plugin'} eq "virt" and $ident->{'type'} =~ /^if/ and $val eq "LIBVIRT-NET") {
 	    $ident->{'type'} =~ s/_packets//;
     	    $string .= "-" . $ident->{'type'};
 	}
@@ -206,13 +206,13 @@ sub putidjson {
 	if( $val eq "ALL"){
     	    return $stringjson;
 	}
-	elsif( $ident->{'plugin'} eq "libvirt" and $ident->{'type'} eq "virt_cpu_total" and $val eq "LIBVIRT-CPU"){
+	elsif( $ident->{'plugin'} eq "virt" and $ident->{'type'} eq "virt_cpu_total" and $val eq "LIBVIRT-CPU"){
     	    return $stringjson;
 	}
-	elsif( $ident->{'plugin'} eq "libvirt" and $ident->{'type'} =~ /^disk$/ and $val eq "LIBVIRT-DISK"){
+	elsif( $ident->{'plugin'} eq "virt" and $ident->{'type'} =~ /^disk$/ and $val eq "LIBVIRT-DISK"){
     	    return $stringjson;
 	}
-	elsif( $ident->{'plugin'} eq "libvirt" and $ident->{'type'} =~ /^if$/ and $val eq "LIBVIRT-NET"){
+	elsif( $ident->{'plugin'} eq "virt" and $ident->{'type'} =~ /^if$/ and $val eq "LIBVIRT-NET"){
     	    return $stringjson;
 	}
 }
@@ -245,18 +245,18 @@ sub listval {
 
 	foreach my $ident (@res) {
 
-      my $rs = putidjson($ident);
-	   
-	   if(length($rs) > 0){
+	    my $rs = putidjson($ident);
+	
+	    if(length($rs) > 0){
 
-	   	print "\t,\n" if not $firstline;
-	   	$firstline = 0;
-	   	print "\t{\n";
+		print "\t,\n" if not $firstline;
+		$firstline = 0;
+		print "\t{\n";
 
-	   	print "\t\t\"" . putidjson($ident) . "\n";
+		print "\t\t\"" . putidjson($ident) . "\n";
 
-	   	print "\t}\n";
-	   } #end of if
+		print "\t}\n";
+	    } #end of if
 
 	} #end of foreach
 
@@ -317,10 +317,10 @@ sub getval {
 	    #debug
 	    #print $line[0] . "\n";
 
-	    if( $line[0] =~ /^.*\/libvirt\/virt_cpu_total/ ){
+	    if( $line[0] =~ /^.*\/virt\/virt_cpu_total/ ){
                 print "$vals->{$key}\n";
 	    }
-	    elsif($line[0] =~ /^.*\/libvirt\/disk_ops/){
+	    elsif($line[0] =~ /^.*\/virt\/disk_ops/){
 	    
 		if($val_type eq "OPS-READ" and $key eq "read"){
             	    print "$vals->{$key}\n";
@@ -332,7 +332,7 @@ sub getval {
                     print "\t$key: $vals->{$key}\n";
 		}
 	    }
-	    elsif($line[0] =~ /^.*\/libvirt\/disk_octets/){
+	    elsif($line[0] =~ /^.*\/virt\/disk_octets/){
 	    
 		#debug
 		#print "DEBUG: disk_octets options ..." . $/;
@@ -348,7 +348,7 @@ sub getval {
 		}
 
 	    }
-	    elsif($line[0] =~ /^.*\/libvirt\/if_packets/){
+	    elsif($line[0] =~ /^.*\/virt\/if_packets/){
 
 		#debug
 		#print "DEBUG: if_packets options ..." . $/;
@@ -364,7 +364,7 @@ sub getval {
 		}
 		
 	    }
-	    elsif($line[0] =~ /^.*\/libvirt\/if_octets/){
+	    elsif($line[0] =~ /^.*\/virt\/if_octets/){
 
 		#debug
 		#print "DEBUG: if_octets options ..." . $/;
