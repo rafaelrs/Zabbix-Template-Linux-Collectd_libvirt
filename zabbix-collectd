@@ -1,0 +1,4 @@
+Defaults:zabbix !requiretty
+Cmnd_Alias ZABBIX_COLLECTD_CMD = /etc/zabbix/scripts/collectd-libvirt/collect-libvirt-handler.pl
+zabbix   ALL = (other_user)  NOPASSWD: ALL
+zabbix   ALL = (root)        NOPASSWD: ZABBIX_COLLECTD_CMD
